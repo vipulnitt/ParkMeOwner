@@ -106,9 +106,11 @@ public class AddActivity extends AppCompatActivity {
         addadrs = findViewById(R.id.addloc);
         addadrs.setVisibility(View.GONE);
         firebaseAuth = FirebaseAuth.getInstance();
-        storageRef = FirebaseStorage.getInstance().getReference("Owners");
-        databaseRef = FirebaseDatabase.getInstance().getReference("Owners");
         userid = firebaseAuth.getCurrentUser().getUid();
+
+        storageRef = FirebaseStorage.getInstance().getReference("Owners");
+        databaseRef = FirebaseDatabase.getInstance().getReference(userid);
+
         firestore = FirebaseFirestore.getInstance();
         selectLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,21 +192,21 @@ public class AddActivity extends AppCompatActivity {
                     }
                 });
 
-                databaseRef.child(userid).child("pname").setValue(propertyName.getText().toString());
-                databaseRef.child(userid).child("address").setValue(selectAddress.getText().toString());
-                databaseRef.child(userid).child("pinCode").setValue(pincode.getText().toString());
-                databaseRef.child(userid).child("City").setValue(city.getText().toString());
-                databaseRef.child(userid).child("Longitude").setValue(selectedLong);
-                databaseRef.child(userid).child("Latitude").setValue(selectedLat);
-                databaseRef.child(userid).child("Slots").child("Two").setValue(0);
-                databaseRef.child(userid).child("Slots").child("Four").setValue(0);
+                databaseRef.child("pname").setValue(propertyName.getText().toString());
+                databaseRef.child("address").setValue(selectAddress.getText().toString());
+                databaseRef.child("pinCode").setValue(pincode.getText().toString());
+                databaseRef.child("City").setValue(city.getText().toString());
+                databaseRef.child("Longitude").setValue(selectedLong);
+                databaseRef.child("Latitude").setValue(selectedLat);
+                databaseRef.child("Slots").child("Two").setValue(0);
+                databaseRef.child("Slots").child("Four").setValue(0);
 startActivity(new Intent(getApplicationContext(),ownerDetails.class));
             }
         });
     }
 
     public void permission() {
-        Dexter.withContext(this).withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION).withListener(new MultiplePermissionsListener() {
+        Dexter.withContext(this).withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION).withListener(new MultiplePermissionsListener() {
             @Override
             public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
 getCurrentLocation();
@@ -343,9 +345,9 @@ private  void getAddress(double longitude,double latitude)
                         @Override
                         public void onSuccess(Uri uri) {
                             if(x==0)
-                                databaseRef.child(userid).child("Interior").setValue(uri.toString());
+                                databaseRef.child("Interior").setValue(uri.toString());
                             if(x==1)
-                                databaseRef.child(userid).child("Exterior").setValue(uri.toString());
+                                databaseRef.child("Exterior").setValue(uri.toString());
                             Log.d("vipull",""+uri);
                         }
                     });

@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -19,6 +20,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ParkMe">
+        <activity
+            android:name=".BillPayment"
+            android:exported="false" />
+        <activity
+            android:name=".ui.login.BillPayment"
+            android:exported="false"
+            android:label="@string/title_activity_bill_payment" />
         <activity
             android:name=".Booking"
             android:exported="false" />

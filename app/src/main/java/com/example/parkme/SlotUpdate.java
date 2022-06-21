@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -26,6 +27,7 @@ public class SlotUpdate extends AppCompatActivity {
     DatabaseReference databaseReference;
     String userid;
     Button updateSlot;
+    EditText twoPrice,fourPrice;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,10 +39,33 @@ public class SlotUpdate extends AppCompatActivity {
         up4Button = findViewById(R.id.up4Button);
         down4Button=findViewById(R.id.down4Button);
         updateSlot = findViewById(R.id.updateSlot);
+        twoPrice = findViewById(R.id.twoEdit);
+        fourPrice = findViewById(R.id.fourEdit);
         firebaseAuth = FirebaseAuth.getInstance();
         userid= firebaseAuth.getCurrentUser().getUid();
-        databaseReference= FirebaseDatabase.getInstance().getReference("Owners");
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Owners").child(userid).child("Slots");
+        databaseReference= FirebaseDatabase.getInstance().getReference(userid);
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference(userid).child("Slots");
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(userid).child("Price");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.getChildrenCount()!=2)
+                {
+                    twoPrice.setText("0");
+                    fourPrice.setText("0");
+                }else
+                {
+                    twoPrice.setText(snapshot.child("two").getValue().toString());
+                   // tprice=Integer.parseInt(snapshot.child("two").getValue().toString())
+                    fourPrice.setText(snapshot.child("four").getValue().toString());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -101,8 +126,10 @@ public class SlotUpdate extends AppCompatActivity {
         updateSlot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                databaseReference.child(userid).child("Slots").child("Four").setValue(""+fourSlots);
-                databaseReference.child(userid).child("Slots").child("Two").setValue(""+twoSlots);
+                databaseReference.child("Slots").child("Four").setValue(""+fourSlots);
+                databaseReference.child("Slots").child("Two").setValue(""+twoSlots);
+                ref.child("two").setValue(twoPrice.getText().toString());
+                ref.child("four").setValue(fourPrice.getText().toString());
                 finish();
 
             }

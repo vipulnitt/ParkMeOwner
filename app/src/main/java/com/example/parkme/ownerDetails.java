@@ -50,8 +50,8 @@ public class ownerDetails extends AppCompatActivity {
         upload = findViewById(R.id.imageButton);
         firebaseAuth = FirebaseAuth.getInstance();
         userid = firebaseAuth.getCurrentUser().getUid();
-        storageRef = FirebaseStorage.getInstance().getReference("Owners");
-        databaseRef = FirebaseDatabase.getInstance().getReference("Owners");
+        storageRef = FirebaseStorage.getInstance().getReference(userid);
+        databaseRef = FirebaseDatabase.getInstance().getReference(userid);
         upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,9 +64,9 @@ openFileChooser();
                 String oName = ownerName.getText().toString();
                 String oContact = ownerContact.getText().toString();
                 String oEmail = ownerEmail.getText().toString();
-                databaseRef.child(userid).child("ownerName").setValue(oName);
-                databaseRef.child(userid).child("ownerContact").setValue(oContact);
-                databaseRef.child(userid).child("ownerEmail").setValue(oEmail);
+                databaseRef.child("ownerName").setValue(oName);
+                databaseRef.child("ownerContact").setValue(oContact);
+                databaseRef.child("ownerEmail").setValue(oEmail);
                 userid = Objects.requireNonNull(firebaseAuth.getCurrentUser().getUid());
                 String filename = userid+System.currentTimeMillis()+"."+getFileExtension(fileuri);
                 uploadFile(filename);
@@ -106,7 +106,7 @@ storageReference.putFile(fileuri).addOnSuccessListener(new OnSuccessListener<Upl
          @Override
          public void onSuccess(Uri uri) {
              Log.d("vipull",""+uri);
-             databaseRef.child(userid).child("Document").setValue(uri.toString());
+             databaseRef.child("Document").setValue(uri.toString());
          }
      });
     }

@@ -31,7 +31,7 @@ public class Booking extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking);
         userid = FirebaseAuth.getInstance().getCurrentUser().getUid().toString();
-        DatabaseReference root =FirebaseDatabase.getInstance().getReference("Owners").child(userid).child("Booking");
+        DatabaseReference root =FirebaseDatabase.getInstance().getReference("OwnerBooking").child(userid);
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

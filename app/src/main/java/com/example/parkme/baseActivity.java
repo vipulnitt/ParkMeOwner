@@ -95,7 +95,7 @@ public class baseActivity extends AppCompatActivity {
               startActivity(new Intent(getApplicationContext(),Booking.class));
           }
       });
-       DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Owners").child(userid);
+       DatabaseReference reference = FirebaseDatabase.getInstance().getReference(userid);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -121,7 +121,7 @@ public class baseActivity extends AppCompatActivity {
         });
 
 
-        DatabaseReference referenceS = FirebaseDatabase.getInstance().getReference("Owners").child(userid).child("Slots");
+        DatabaseReference referenceS = FirebaseDatabase.getInstance().getReference(userid).child("Slots");
         referenceS.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -140,7 +140,7 @@ public class baseActivity extends AppCompatActivity {
 
             }
         });
-        DatabaseReference dbr= FirebaseDatabase.getInstance().getReference("Owners").child(userid).child("Booking");
+        DatabaseReference dbr= FirebaseDatabase.getInstance().getReference("OwnerBooking").child(userid);
         dbr.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
