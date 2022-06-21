@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ParkMe</string>
+    <string name="Open">ParkMe</string>
+    <string name="Close">ParkMe</string>
+    <string name="map_api">AIzaSyAdCqeQUqTLRp7VnoBPBjCMnjk9L4ZfRIA</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
