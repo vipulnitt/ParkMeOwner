@@ -44,13 +44,12 @@ public class Booking extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 idList = new ArrayList<>();
-                Log.d("vipulx",snapshot.getValue().toString());
+               // Log.d("vipulx",snapshot.getValue().toString());
                 for(DataSnapshot dataSnapshot:snapshot.getChildren())
                 {
-
                     idList.add(  dataSnapshot.getValue().toString());
                 }
-               // Log.d("vipulz",""+idList.size());
+               //Log.d("vipulz",""+idList.size());
                 Fect((ArrayList<String>) idList);
                 //
             }
@@ -63,7 +62,7 @@ public class Booking extends AppCompatActivity {
 
 
     }
-    public void Fect(ArrayList<String> idList)
+    private void Fect(ArrayList<String> idList)
     {
         int z= idList.size();
 
@@ -80,15 +79,13 @@ public class Booking extends AppCompatActivity {
                     if(index>=0)
                     {
                         Model model = new Model();
-                        if(!dataSnapshot.child("BookingStatus").getValue().toString().equals("Canceled"))
-                        {
+
                             model.setBookingStatus(dataSnapshot.child("BookingStatus").getValue().toString());
                             model.setDateTime(dataSnapshot.child("DateTime").getValue().toString());
                             model.setVehicle(dataSnapshot.child("Vehicle").getValue().toString());
                             model.setPayment(dataSnapshot.child("Payment").getValue().toString());
                             model.setId(dataSnapshot.getKey().toString());
                             mlist.add(model);
-                        }
 
 
                     }
@@ -96,7 +93,7 @@ public class Booking extends AppCompatActivity {
 
 
                 }
-
+                Collections.reverse(mlist);
                 adapter.notifyDataSetChanged();
 
             }

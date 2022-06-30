@@ -51,6 +51,25 @@ public class MyAdapter extends RecyclerView.Adapter <MyAdapter.MyViewHolder>{
         SimpleDateFormat sfd = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         holder.datetime.setText(sfd.format(new Date(Long.parseLong(model.getDateTime()))));
     holder.id.setText(model.getId());
+        if(holder.status.getText().equals("CheckedOut"))
+        {
+     holder.cancelbtn.setVisibility(View.GONE);
+     holder.btn.setText("Details");
+     holder.btn.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View view) {
+             Intent intent = new Intent(context,BillPayment.class);
+             intent.putExtra("Id",model.getId());
+             context.startActivity(intent);
+         }
+     });
+        }
+        if(holder.status.getText().equals("Canceled"))
+        {
+            holder.cancelbtn.setVisibility(View.GONE);
+            holder.checkin.setVisibility(View.GONE);
+            holder.btn.setVisibility(View.GONE);
+        }
         if(holder.status.getText().equals("Confirmed"))
         {
             holder.status.setTextColor(Color.rgb(246,190,0));
@@ -58,6 +77,7 @@ public class MyAdapter extends RecyclerView.Adapter <MyAdapter.MyViewHolder>{
            holder.cancelbtn.setVisibility(View.GONE);
            holder.txt.setVisibility(View.VISIBLE);
            holder.checkin.setVisibility(View.VISIBLE);
+
         }
         if(holder.status.getText().equals("Checked In"))
         {
@@ -79,6 +99,7 @@ public class MyAdapter extends RecyclerView.Adapter <MyAdapter.MyViewHolder>{
                     DatabaseReference db = FirebaseDatabase.getInstance().getReference("Booking").child(model.getId());
                     long ti=timestamp.getSeconds()*1000;
                     db.child("outTime").setValue(ti);
+                    db.child("BookingStatus").setValue("CheckedOut");
                     db.child("inTime").addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -96,7 +117,7 @@ public class MyAdapter extends RecyclerView.Adapter <MyAdapter.MyViewHolder>{
 
                         }
                     });
-
+                    holder.checkin.setText("Details");
                     context.startActivity(intent);
                 }
             });
@@ -140,12 +161,11 @@ public class MyAdapter extends RecyclerView.Adapter <MyAdapter.MyViewHolder>{
         @Override
         public void onClick(View view) {
             //
-            if (view.getId() == btn.getId()) {
+            if (view.getId() == btn.getId()&&btn.getText().toString().equals("CONFIRM")) {
                 if (status.getText().equals("Pending")) {
                     status.setText("Confirmed");
                     status.setTextColor(Color.rgb(0, 153, 0));
                     btn.setBackgroundColor(Color.rgb(0, 153, 0));
-                    btn.setText("CONFIRMED");
                     cancelbtn.setVisibility(View.GONE);
                     DatabaseReference db = FirebaseDatabase.getInstance().getReference("Booking").child(id.getText().toString());
                     db.child("BookingStatus").setValue("Confirmed");

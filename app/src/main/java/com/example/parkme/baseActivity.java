@@ -15,9 +15,11 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -36,6 +38,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class baseActivity extends AppCompatActivity {
    ActionBarDrawerToggle actionBarDrawerToggle;
@@ -43,7 +46,8 @@ public class baseActivity extends AppCompatActivity {
    private TextView textView,twoSlot,fourSlot;
    String userid;
    FirebaseAuth firebaseAuth;
-   Button button;
+   Button button,locationbtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +57,7 @@ public class baseActivity extends AppCompatActivity {
         twoSlot = findViewById(R.id.twoSlot);
         fourSlot = findViewById(R.id.fourSlot);
         button = findViewById(R.id.button);
+        locationbtn = findViewById(R.id.MyLocation);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout, Open, Close);
         actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
@@ -71,10 +76,10 @@ public class baseActivity extends AppCompatActivity {
                     startActivity(new Intent(baseActivity.this,SlotUpdate.class));
                 }
                 if(id==R.id.home) {
-                    //HomePage
+                    drawerLayout.closeDrawer(Gravity.LEFT);
                 }
                 if(id==R.id.profile){
-                   //Profile
+                   startActivity(new Intent(getApplicationContext(),Profile.class));
                 }
                 if(id==R.id.addpark){
                     startActivity(new Intent(baseActivity.this,AddActivity.class));
@@ -158,6 +163,28 @@ public class baseActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+        locationbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatabaseReference db = FirebaseDatabase.getInstance().getReference(userid);
+                db.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                       String lon=snapshot.child("Longitude").getValue().toString();
+                        String lat=snapshot.child("Latitude").getValue().toString();
+                        String geoUri = "http://maps.google.com/maps?q=loc:" + lat + "," + lon + " (" + "Parking" + ")";
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(geoUri));
+                        startActivity(intent);
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             }
         });
     }

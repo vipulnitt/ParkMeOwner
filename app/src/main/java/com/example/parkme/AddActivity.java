@@ -26,6 +26,7 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Button;
 
@@ -90,6 +91,7 @@ public class AddActivity extends AppCompatActivity {
     private DatabaseReference databaseRef;
     private FirebaseAuth firebaseAuth;
     String userid;
+    private TextView textView5,textView6;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,6 +105,8 @@ public class AddActivity extends AppCompatActivity {
         next = findViewById(R.id.next);
         selectLocation = findViewById(R.id.locbtn);
         uploadpic = findViewById(R.id.imageView);
+        textView5 = findViewById(R.id.textView5);
+        textView6=findViewById(R.id.textView6);
         addadrs = findViewById(R.id.addloc);
         addadrs.setVisibility(View.GONE);
         firebaseAuth = FirebaseAuth.getInstance();
@@ -118,6 +122,8 @@ public class AddActivity extends AppCompatActivity {
                 drawerLayout.setVisibility(View.VISIBLE);
                 addadrs.setVisibility(View.VISIBLE);
                 uploadpic.setVisibility(View.GONE);
+                textView5.setVisibility(View.GONE);
+                textView6.setVisibility(View.GONE);
                 uploadpicback.setVisibility(View.GONE);
                 next.setVisibility(View.GONE);
             }
@@ -163,44 +169,64 @@ public class AddActivity extends AppCompatActivity {
                 uploadpic.setVisibility(View.VISIBLE);
                 uploadpicback.setVisibility(View.VISIBLE);
                 next.setVisibility(View.VISIBLE);
+                textView5.setVisibility(View.VISIBLE);
+                textView6.setVisibility(View.VISIBLE);
+
             }
         });
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String filename =userid+"Exterior"+"."+getFileExtension(fileuriEx);
-                uploadFile(filename,fileuriEx,0);
-                filename = userid+"Interior"+"."+getFileExtension(fileuriIn);
-                uploadFile(filename,fileuriIn,1);
-                DocumentReference db = firestore.collection("parking").document(userid);
-                String hash = GeoFireUtils.getGeoHashForLocation(new GeoLocation(selectedLat, selectedLong));
-                Map<String, Object> updates = new HashMap<>();
-                updates.put("geohash", hash);
-                updates.put("lat", selectedLat);
-                updates.put("lng", selectedLong);
-                updates.put("userid", userid);
-               // updates.put("Id",userid);
-                db.set(updates).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Log.d("vipulpatel","Success");
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("vipulpatel",e.getMessage());
-                    }
-                });
+               if(fileuriEx==null)
+               {
+                   Toast.makeText(getApplicationContext(),"Please Click Exterior Picture!",Toast.LENGTH_SHORT).show();
+               }else if(fileuriIn==null)
+               {
+                   Toast.makeText(getApplicationContext(),"Please Click Interior Picture!",Toast.LENGTH_SHORT).show();
+               }else if(selectedLat==0||selectedLong==0)
+               {
+                   Toast.makeText(getApplicationContext(),"Please Location On Map!",Toast.LENGTH_SHORT).show();
+               }else if(propertyName==null)
+               {
+                   Toast.makeText(getApplicationContext(),"Please Fill property Name!",Toast.LENGTH_SHORT).show();
+               }else
+               {
+                   Log.d("xyzzz",""+selectedLat);
+                   String filename =userid+"Exterior"+"."+getFileExtension(fileuriEx);
+                   uploadFile(filename,fileuriEx,0);
+                   filename = userid+"Interior"+"."+getFileExtension(fileuriIn);
+                   uploadFile(filename,fileuriIn,1);
+                   DocumentReference db = firestore.collection("parking").document(userid);
+                   String hash = GeoFireUtils.getGeoHashForLocation(new GeoLocation(selectedLat, selectedLong));
+                   Map<String, Object> updates = new HashMap<>();
+                   updates.put("geohash", hash);
+                   updates.put("lat", selectedLat);
+                   updates.put("lng", selectedLong);
+                   updates.put("userid", userid);
+                   // updates.put("Id",userid);
+                   db.set(updates).addOnSuccessListener(new OnSuccessListener<Void>() {
+                       @Override
+                       public void onSuccess(Void unused) {
+                           Log.d("vipulpatel","Success");
+                       }
+                   }).addOnFailureListener(new OnFailureListener() {
+                       @Override
+                       public void onFailure(@NonNull Exception e) {
+                           Log.d("vipulpatel",e.getMessage());
+                       }
+                   });
 
-                databaseRef.child("pname").setValue(propertyName.getText().toString());
-                databaseRef.child("address").setValue(selectAddress.getText().toString());
-                databaseRef.child("pinCode").setValue(pincode.getText().toString());
-                databaseRef.child("City").setValue(city.getText().toString());
-                databaseRef.child("Longitude").setValue(selectedLong);
-                databaseRef.child("Latitude").setValue(selectedLat);
-                databaseRef.child("Slots").child("Two").setValue(0);
-                databaseRef.child("Slots").child("Four").setValue(0);
-startActivity(new Intent(getApplicationContext(),ownerDetails.class));
+                   databaseRef.child("pname").setValue(propertyName.getText().toString());
+                   databaseRef.child("address").setValue(selectAddress.getText().toString());
+                   databaseRef.child("pinCode").setValue(pincode.getText().toString());
+                   databaseRef.child("City").setValue(city.getText().toString());
+                   databaseRef.child("Longitude").setValue(selectedLong);
+                   databaseRef.child("Latitude").setValue(selectedLat);
+                   databaseRef.child("Slots").child("Two").setValue(0);
+                   databaseRef.child("Slots").child("Four").setValue(0);
+                   startActivity(new Intent(getApplicationContext(),ownerDetails.class));
+               }
+
             }
         });
     }
@@ -333,6 +359,7 @@ private  void getAddress(double longitude,double latitude)
     }
     private void uploadFile(String fileName,Uri fileuri,int x)
     {
+        Log.d("vipulc",""+fileuri);
         if(fileuri!=null)
         {
             StorageReference storageReference = storageRef.child(fileName);

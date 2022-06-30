@@ -100,10 +100,22 @@
             android:text="Current Booking"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.47"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.748" />
+            app:layout_constraintVertical_bias="0.811" />
+
+        <Button
+            android:id="@+id/MyLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="63dp"
+            android:layout_marginBottom="24dp"
+            android:text="My Parking Location"
+            app:layout_constraintBottom_toTopOf="@+id/button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/twoSlot"
+            app:layout_constraintVertical_bias="0.511" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

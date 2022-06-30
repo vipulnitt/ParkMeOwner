@@ -105,6 +105,7 @@ public class SlotUpdate extends AppCompatActivity {
         down2Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(twoSlots>0)
                 twoSlots--;
                 twoCount.setText(""+twoSlots);
             }
@@ -112,6 +113,7 @@ public class SlotUpdate extends AppCompatActivity {
         up4Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 fourSlots++;
                 fourCount.setText(""+fourSlots);
             }
@@ -119,6 +121,7 @@ public class SlotUpdate extends AppCompatActivity {
         down4Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(fourSlots>0)
                 fourSlots--;
                 fourCount.setText(""+fourSlots);
             }

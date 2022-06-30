@@ -21,6 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ParkMe">
         <activity
+            android:name=".Profile"
+            android:exported="false" />
+        <activity
             android:name=".BillPayment"
             android:exported="false" />
         <activity

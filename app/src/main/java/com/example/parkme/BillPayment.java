@@ -58,6 +58,18 @@ public class BillPayment extends AppCompatActivity {
                txtduration.setText(""+hrs);
                txtamount.setText(""+amount);
                txtprice.setText(""+price);
+                DatabaseReference dr= FirebaseDatabase.getInstance().getReference(snapshot.child("OwnerId").getValue().toString());
+                dr.child("pname").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        txtpname.setText(snapshot.getValue().toString());
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             }
 
             @Override

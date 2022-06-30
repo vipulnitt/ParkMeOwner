@@ -61,6 +61,7 @@ openFileChooser();
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String oName = ownerName.getText().toString();
                 String oContact = ownerContact.getText().toString();
                 String oEmail = ownerEmail.getText().toString();
@@ -68,9 +69,18 @@ openFileChooser();
                 databaseRef.child("ownerContact").setValue(oContact);
                 databaseRef.child("ownerEmail").setValue(oEmail);
                 userid = Objects.requireNonNull(firebaseAuth.getCurrentUser().getUid());
-                String filename = userid+System.currentTimeMillis()+"."+getFileExtension(fileuri);
-                uploadFile(filename);
-                startActivity(new Intent(ownerDetails.this,baseActivity.class));
+                if(fileuri==null)
+                {
+                    Toast.makeText(getApplicationContext(),"Please Upload Documents!",Toast.LENGTH_SHORT).show();
+                }else
+                {
+                    String filename = userid+System.currentTimeMillis()+"."+getFileExtension(fileuri);
+                    uploadFile(filename);
+                    startActivity(new Intent(ownerDetails.this,baseActivity.class));
+                    finish();
+                }
+
+
             }
         });
 

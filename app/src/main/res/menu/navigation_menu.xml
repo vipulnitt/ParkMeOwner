@@ -14,7 +14,7 @@
     </item>
     <item
         android:id="@+id/slot"
-        android:title="Update Slots">
+        android:title="Update Prices and Slots">
     </item>
     <item
         android:id="@+id/rate"
