@@ -177,6 +177,7 @@ public class baseActivity extends AppCompatActivity {
                         String geoUri = "http://maps.google.com/maps?q=loc:" + lat + "," + lon + " (" + "Parking" + ")";
                         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(geoUri));
                         startActivity(intent);
+                        finish();
 
                     }
 
