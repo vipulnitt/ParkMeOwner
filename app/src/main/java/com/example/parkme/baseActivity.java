@@ -47,6 +47,7 @@ public class baseActivity extends AppCompatActivity {
    String userid;
    FirebaseAuth firebaseAuth;
    Button button,locationbtn;
+   boolean ck;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,16 +169,23 @@ public class baseActivity extends AppCompatActivity {
         locationbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ck=false;
+
                 DatabaseReference db = FirebaseDatabase.getInstance().getReference(userid);
                 db.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                       String lon=snapshot.child("Longitude").getValue().toString();
-                        String lat=snapshot.child("Latitude").getValue().toString();
-                        String geoUri = "http://maps.google.com/maps?q=loc:" + lat + "," + lon + " (" + "Parking" + ")";
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(geoUri));
-                        startActivity(intent);
-                        finish();
+                        if(!ck)
+                        {
+                            String lon=snapshot.child("Longitude").getValue().toString();
+                            String lat=snapshot.child("Latitude").getValue().toString();
+                            String geoUri = "http://maps.google.com/maps?q=loc:" + lat + "," + lon + " (" + "Parking" + ")";
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(geoUri));
+                            ck=true;
+                            startActivity(intent);
+
+                        }
+
 
                     }
 
